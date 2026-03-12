@@ -14,7 +14,7 @@ def get_token():
         "grant_type": "client_credentials",
         "client_id": CLIENT_ID,
         "client_secret": CLIENT_SECRET,
-        "scope": "bcf openid offline_access",
+        "scope": "bcf",
     }, timeout=15)
     resp.raise_for_status()
     return resp.json()["access_token"]
@@ -100,7 +100,7 @@ def get_comments(project_id: str, topic_id: str):
 
 @mcp.tool()
 def create_comment(project_id: str, topic_id: str, comment: str):
-    """Fuegt einen neuen Kommentar zu einem Topic hinzu."""
+    """Fuegt einen neuen Kommentar hinzu."""
     resp = httpx.post(f"{BASE_URL}/projects/{project_id}/topics/{topic_id}/comments", headers=headers(), json={"comment": comment}, timeout=15)
     return ok(resp)
 
