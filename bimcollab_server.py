@@ -510,9 +510,5 @@ def get_files(project_id: str) -> str:
 # ════════════════════════════════════════════════════════════════════════════
 
 if __name__ == "__main__":
-    import uvicorn
-    import os
-    port = int(os.environ.get("PORT", 8000))
-    print(f"BIMcollab MCP Server startet auf Port {port}...")
-    app = mcp.get_asgi_app()
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    print("BIMcollab MCP Server startet...")
+    mcp.run(transport="sse")
