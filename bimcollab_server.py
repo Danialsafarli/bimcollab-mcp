@@ -18,7 +18,18 @@ TOKEN_URL     = "https://playground.bimcollab.com/identity/connect/token"
 BASE_URL      = "https://playground.bimcollab.com/bcf/3.0"
 # ─────────────────────────────────────────────────────────────────────────────
 
-mcp = FastMCP("BIMcollab")
+mcp = FastMCP("BIMcollab", host="0.0.0.0", port=8000)
+```
+
+Dann **"Commit changes"** → Railway startet neu (~2 Min)
+
+---
+
+**Fix 2 — Claude.ai URL anpassen**
+
+Die URL muss `/sse` am Ende haben:
+```
+https://bimcollab-mcp-production.up.railway.app/sse
 
 # ── Hilfsfunktion: Token holen ────────────────────────────────────────────────
 def get_token() -> str:
