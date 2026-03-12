@@ -510,6 +510,39 @@ def get_files(project_id: str) -> str:
 # ════════════════════════════════════════════════════════════════════════════
 
 if __name__ == "__main__":
+    import uvicorn
     port = int(os.environ.get("PORT", 8000))
     print(f"BIMcollab MCP Server startet auf Port {port}...")
-    mcp.run(transport="sse", host="0.0.0.0", port=port)
+    app = mcp.get_asgi_app()
+    uvicorn.run(app, host="0.0.0.0", port=port)
+```
+
+Und in der `requirements.txt` auf GitHub auch `uvicorn` hinzufügen:
+
+**Alt:**
+```
+mcp
+httpx
+```
+
+**Neu:**
+```
+mcp
+httpx
+uvicorn
+```
+
+---
+
+## Schritt für Schritt:
+
+**1.** GitHub → `bimcollab_server.py` → ✏️ → letzten Block ersetzen → **"Commit changes"**
+
+**2.** GitHub → `requirements.txt` → ✏️ → `uvicorn` hinzufügen → **"Commit changes"**
+
+**3.** Warte ~2 Minuten bis Railway neu startet
+
+**4.** Railway Logs prüfen — du solltest sehen:
+```
+BIMcollab MCP Server startet auf Port 8080...
+Uvicorn running on http://0.0.0.0:8080
