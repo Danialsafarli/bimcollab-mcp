@@ -1,0 +1,65 @@
+import httpx
+import json
+from mcp.server.fastmcp import FastMCP
+
+# BIMcollab Playground Zugangsdaten
+CLIENT_ID = "PlayGround_Client"
+CLIENT_SECRET = "k!xWcjad!u@L%ZWHc%%yKtMTqR%o1be@qWfWYaDL"
+TOKEN_URL = "https://playground.bimcollab.com/identity/connect/token"
+BASE_URL = "https://playground.bimcollab.com/bcf"
+
+mcp = FastMCP("BIMcollab")
+
+def get_token():
+    """Holt einen Zugriffstoken von BIMcollab"""
+    response = httpx.post(TOKEN_URL, data={
+        "grant_type": "client_credentials",
+        "client_id": CLIENT_ID,
+        "client_secret": CLIENT_SECRET,
+        "scope": "bcf"
+    })
+    return response.json().get("access_token")
+
+@mcp.tool()
+def get_projects() -> str:
+    """Listet alle BIMcollab-Projekte auf"""
+    token = get_token()
+    response = httpx.get(
+        f"{BASE_URL}/3.0/projects",
+        headers={"Authorization": f"Bearer {token}"}
+    )
+    projects = response.json()
+    return json.dumps(projects, indent=2)
+
+@mcp.tool()
+def get_topics(project_id: str) -> str:
+    """Holt alle Issues (Topics) eines Projekts"""
+    token = get_token()
+    response = httpx.get(
+        f"{BASE_URL}/3.0/projects/{project_id}/topics",
+        headers={"Authorization": f"Bearer {token}"}
+    )
+    return json.dumps(response.json(), indent=2)
+
+@mcp.tool()
+def create_topic(project_id: str, title: str, description: str = "") -> str:
+    """Erstellt ein neues Issue in BIMcollab"""
+    token = get_token()
+    response = httpx.post(
+        f"{BASE_URL}/3.0/projects/{project_id}/topics",
+        headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+        json={"title": title, "description": description, "topic_type": "Issue"}
+    )
+    return json.dumps(response.json(), indent=2)
+
+if __name__ == "__main__":
+    mcp.run(transport="stdio")
+```
+
+---
+
+## Schritt 4 — In Claude.ai einbinden
+
+Den Server starten und in Claude als Custom Connector hinzufügen:
+```
+python bimcollab_server.py
