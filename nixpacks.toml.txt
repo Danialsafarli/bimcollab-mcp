@@ -1,0 +1,16 @@
+[phases.setup]
+nixPkgs = ["python311"]
+
+[phases.install]
+cmds = ["pip install -r requirements.txt"]
+
+[start]
+cmd = "python bimcollab_server.py"
+```
+
+### Datei 2: `requirements.txt` — prüfen
+Die Datei muss genau so aussehen:
+```
+mcp[cli]
+httpx
+uvicorn
