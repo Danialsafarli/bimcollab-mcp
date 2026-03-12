@@ -8,7 +8,7 @@ Fuer Railway-Deployment: Procfile mit "web: python bimcollab_server.py" erstelle
 """
 
 import httpx
-import json
+import os
 from mcp.server.fastmcp import FastMCP
 
 # ─── Zugangsdaten (Playground) ───────────────────────────────────────────────
@@ -510,6 +510,6 @@ def get_files(project_id: str) -> str:
 # ════════════════════════════════════════════════════════════════════════════
 
 if __name__ == "__main__":
-    print("BIMcollab MCP Server startet...")
-    print(f"Verbinde mit: {BASE_URL}")
-    mcp.run(transport="sse")
+    port = int(os.environ.get("PORT", 8000))
+    print(f"BIMcollab MCP Server startet auf Port {port}...")
+    mcp.run(transport="sse", host="0.0.0.0", port=port)
